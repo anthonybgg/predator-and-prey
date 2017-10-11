@@ -20,9 +20,6 @@ abstract class GraphicalSimulation extends Canvas {
     protected int sleepTime = SLEEP_TIME;
     protected Image buffer;
 
-    public GraphicalSimulation() {
-
-    }
     public GraphicalSimulation(String name, int inWidth, int inHeight) {
         width = inWidth;
         height = inHeight;

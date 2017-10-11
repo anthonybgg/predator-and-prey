@@ -1,15 +1,19 @@
 package com.example;
 
 public class Wolf extends Animal {
-    private int count;
+    private static int count;
     private int daysSinceMeal;
 
-    public int getCount() {
-
+    public static int getCount() {
+        return count;
     }
 
     public Wolf(Cell cell) {
 
+    }
+
+    public int getDaysSinceMeal() {
+        return daysSinceMeal;
     }
 
     @Override

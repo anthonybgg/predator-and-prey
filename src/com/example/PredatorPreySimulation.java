@@ -16,47 +16,47 @@ public class PredatorPreySimulation extends GraphicalSimulation {
     private static Random random = new Random();
 
     private ParameterBlock parameterBlock;
-//     private Cell[][] cells;
+    private Cell[][] cells;
     private final int cellWidth;
     private final int cellHeight;
     private int epoch = 0;
 
-//    private void AddRandomNumberOfBunnies(Cell cell, double maxBunnies) {
-//        double numberOfBunnies = maxBunnies * random.nextDouble();
-//        while (random.nextDouble() < numberOfBunnies) {
-//            cell.addAnimal(new Rabbit(cell));
-//            numberOfBunnies--;
-//        }
-//    }
+    private void AddRandomNumberOfBunnies(Cell cell, double maxBunnies) {
+        double numberOfBunnies = maxBunnies * random.nextDouble();
+        while (random.nextDouble() < numberOfBunnies) {
+            cell.addAnimal(new Rabbit(cell));
+            numberOfBunnies--;
+        }
+    }
 //
-//    private void AddRandomNumberOfWolves(Cell cell, double maxWolves) {
-//        double numberOfWolves = maxWolves * random.nextDouble();
-//        while (random.nextDouble() < numberOfWolves) {
-//            cell.addAnimal(new Wolf(cell));
-//            numberOfWolves--;
-//        }
-//    }
+    private void AddRandomNumberOfWolves(Cell cell, double maxWolves) {
+        double numberOfWolves = maxWolves * random.nextDouble();
+        while (random.nextDouble() < numberOfWolves) {
+            cell.addAnimal(new Wolf(cell));
+            numberOfWolves--;
+        }
+    }
 
-    private PredatorPreySimulation(ParameterBlock parameterBlock) {
+    public PredatorPreySimulation(ParameterBlock parameterBlock) {
         super("PredatorPreySimulation!", parameterBlock.getScreenWidth(), parameterBlock.getScreenHeight());
 
         this.parameterBlock = parameterBlock;
         cellWidth = parameterBlock.getScreenWidth() / parameterBlock.getNumCellsWide();
         cellHeight = parameterBlock.getScreenHeight() / parameterBlock.getNumCellsHigh();
 
-//        this.cells = new Cell[parameterBlock.getNumCellsWide()][parameterBlock.getNumCellsHigh()];
-//        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
-//            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
-//                double vegetation = random.nextDouble() * parameterBlock.getMaxVegetation();
-//                Cell cell = new Cell(this, x, y, cellWidth, cellHeight,
-//                        vegetation, parameterBlock.getMaxVegetation(),
-//                        parameterBlock.getVegetationProportionalGrowthRate(),
-//                        parameterBlock.getVegetationLinearGrowthRate());
-//                AddRandomNumberOfBunnies(cell, parameterBlock.getMaxStartingBunnies());
-//                AddRandomNumberOfWolves(cell, parameterBlock.getMaxStartingWolves());
-//                cells[x][y] = cell;
-//            }
-//        }
+        this.cells = new Cell[parameterBlock.getNumCellsWide()][parameterBlock.getNumCellsHigh()];
+        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
+            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
+                double vegetation = random.nextDouble() * parameterBlock.getMaxVegetation();
+                Cell cell = new Cell(this, x, y, cellWidth, cellHeight,
+                        vegetation, parameterBlock.getMaxVegetation(),
+                        parameterBlock.getVegetationProportionalGrowthRate(),
+                        parameterBlock.getVegetationLinearGrowthRate());
+                AddRandomNumberOfBunnies(cell, parameterBlock.getMaxStartingBunnies());
+                AddRandomNumberOfWolves(cell, parameterBlock.getMaxStartingWolves());
+                cells[x][y] = cell;
+            }
+        }
 
         // simulate 4 steps per second
         sleepTime = 250;
@@ -71,21 +71,21 @@ public class PredatorPreySimulation extends GraphicalSimulation {
      * @param y
      * @return the specified Cell
      */
-//    public Cell getCell(int x, int y) {
-//        if (x < 0) {
-//            x = 0;
-//        } else if (x >= parameterBlock.getNumCellsWide()) {
-//            x = parameterBlock.getNumCellsWide() - 1;
-//        }
-//
-//        if (y < 0) {
-//            y = 0;
-//        } else if (y >= parameterBlock.getNumCellsHigh()) {
-//            y = parameterBlock.getNumCellsHigh() - 1;
-//        }
-//
-//        return cells[x][y];
-//    }
+    public Cell getCell(int x, int y) {
+        if (x < 0) {
+            x = 0;
+        } else if (x >= parameterBlock.getNumCellsWide()) {
+            x = parameterBlock.getNumCellsWide() - 1;
+        }
+
+        if (y < 0) {
+            y = 0;
+        } else if (y >= parameterBlock.getNumCellsHigh()) {
+            y = parameterBlock.getNumCellsHigh() - 1;
+        }
+
+        return cells[x][y];
+    }
 
     /**
      * Simulate 1 epoch of the simulation and then draw the current simulated state in the window.
@@ -94,7 +94,7 @@ public class PredatorPreySimulation extends GraphicalSimulation {
     @Override
     public void paint(Graphics brush) {
         // print out the state of the simulation at the beginning of the epoch
-//        System.out.println("epoch: " + epoch + " wolves: " + Wolf.getCount() + " bunnies: " + Rabbit.getCount());
+        System.out.println("epoch: " + epoch + " wolves: " + Wolf.getCount() + " bunnies: " + Rabbit.getCount());
 
         // first copy animals from the next lists into the current lists
 //        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
