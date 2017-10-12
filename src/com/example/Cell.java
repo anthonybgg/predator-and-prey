@@ -56,7 +56,7 @@ public class Cell {
             if (currentAnimals.get(i) instanceof Wolf) {
                 Wolf wolf = (Wolf) currentAnimals.get(i);
                 Animal animal = getRandomCurrentAnimal();
-                boolean hun = animal.attemptToEat(wolf);
+                boolean hunt = animal.attemptToEat(wolf);
                 wolf.update();
             }
         }
