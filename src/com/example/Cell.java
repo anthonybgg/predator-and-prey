@@ -13,7 +13,7 @@ public class Cell {
     private int cellWidth;
     private int cellHeight;
     private List<Animal> currentAnimals = new ArrayList<>();
-    private List<Animal> nextAnimals;
+    private List<Animal> nextAnimals = new ArrayList<>();
     private double vegetation, vegetationShare;
     private double proportionalGrowthRate, maximumVegetation, linearGrowthRate;
 
@@ -47,11 +47,19 @@ public class Cell {
             currentAnimals.add(this.nextAnimals.get(i));
             this.nextAnimals.remove(i);
         }
-
     }
 
     public void update() {
+        //vegetation -= Rabbit.getCount() * consumeVegetationByRabbit();
 
+        for (int i = 0; i < currentAnimals.size(); i++) {
+            if (currentAnimals.get(i) instanceof Wolf) {
+                Wolf wolf = (Wolf) currentAnimals.get(i);
+                Animal animal = getRandomCurrentAnimal();
+                boolean hun = animal.attemptToEat(wolf);
+                wolf.update();
+            }
+        }
     }
 
 
@@ -62,14 +70,20 @@ public class Cell {
         return vegetationShare;
     }
 
+    public double consumeVegetationByRabbit(Rabbit rabbit) {
+        return rabbit.getAppetite();
+    }
+
     public void consumeVegetation(double amountEaten) {
+
     }
 
     public void draw(Graphics brush) {
-
+        paint(brush);
     }
 
     public Color getBackgroundColor() {
+
         return Color.GREEN;
     }
 
@@ -78,7 +92,7 @@ public class Cell {
         return this.x;
     }
 
-    public int getRandomYInCell(int y) {
+    public int getRandomYInCell() {
         this.y = random.nextInt(cellHeight);
         return this.y;
     }
@@ -86,6 +100,7 @@ public class Cell {
     public void paint(Graphics brush) {
 
         brush.setColor(Color.green);
+        getBackgroundColor();
     }
 
 }

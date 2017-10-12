@@ -13,7 +13,7 @@ public class Rabbit extends Animal {
     }
 
     public Rabbit(Cell cell) {
-        this.weight =1.0;
+        this.weight = 1.0;
         this.cell = cell;
         this.color = Color.darkGray;
         count++;
@@ -22,6 +22,11 @@ public class Rabbit extends Animal {
     public double getAppetite() {
         double appetite = (this.weight + 1) / 4;
         return appetite;
+    }
+
+    public double getWeight() {
+        double weight = this.weight;
+        return weight;
     }
 
     public double getHungerDeficit() {
@@ -46,7 +51,18 @@ public class Rabbit extends Animal {
             this.dies(DeathReason.NATURAL_CAUSES);
             return true;
         }
-
+        this.weight += this.cell.consumeVegetationByRabbit();
+        giveBirth();
         return false;
+    }
+
+    public void giveBirth() {
+        if (this.weight > 10) {
+            if (random.nextDouble() < 0.1) {
+                int babyRabbit = 1 + random.nextInt(7);
+                count += babyRabbit;
+                this.weight -= 1;
+            }
+        }
     }
 }

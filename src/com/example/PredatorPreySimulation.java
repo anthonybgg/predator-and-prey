@@ -97,37 +97,37 @@ public class PredatorPreySimulation extends GraphicalSimulation {
         System.out.println("epoch: " + epoch + " wolves: " + Wolf.getCount() + " bunnies: " + Rabbit.getCount());
 
         // first copy animals from the next lists into the current lists
-//        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
-//            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
-//                Cell cell = cells[x][y];
-//                cell.copyNextAnimalsToCurrent();
-//            }
-//        }
+        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
+            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
+                Cell cell = cells[x][y];
+                cell.copyNextAnimalsToCurrent();
+            }
+        }
 //
 //        // simulate each of the cells
-//        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
-//            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
-//                cells[x][y].update();
-//            }
-//        }
+        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
+            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
+                cells[x][y].update();
+            }
+        }
 
         // draw a black background; will in general be drawn over.
         brush.setColor(Color.black);
         brush.fillRect(0, 0, width, height);
 
 
-//        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
-//            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
-//                Cell cell = cells[x][y];
-//
-//                // draw the background of each cell according to its vegetation
-//                brush.setColor(cell.getBackgroundColor());
-//                brush.fillRect(cellWidth * x, cellHeight * y, cellWidth, cellHeight);
-//
-//                // draw the cells animals
-//                cell.draw(brush);
-//            }
-//        }
+        for (int x = 0; x < parameterBlock.getNumCellsWide(); x++) {
+            for (int y = 0; y < parameterBlock.getNumCellsHigh(); y++) {
+                Cell cell = cells[x][y];
+
+                // draw the background of each cell according to its vegetation
+                brush.setColor(cell.getBackgroundColor());
+                brush.fillRect(cellWidth * x, cellHeight * y, cellWidth, cellHeight);
+
+                // draw the cells animals
+                cell.draw(brush);
+            }
+        }
 
         epoch++;
     }
