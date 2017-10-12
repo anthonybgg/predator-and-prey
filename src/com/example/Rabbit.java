@@ -15,7 +15,7 @@ public class Rabbit extends Animal {
     public Rabbit(Cell cell) {
         this.weight = 1.0;
         this.cell = cell;
-        this.color = Color.darkGray;
+        this.color = Color.YELLOW;
         count++;
     }
 
@@ -24,24 +24,16 @@ public class Rabbit extends Animal {
         return appetite;
     }
 
-    public double getWeight() {
-        double weight = this.weight;
-        return weight;
-    }
-
-    public double getHungerDeficit() {
-        double hungerDeficit;
-        hungerDeficit = this.getAppetite() - cell.getVegetationShare();
-        this.hungerDeficit += hungerDeficit;
-        return this.hungerDeficit;
-    }
-
     public void dies(DeathReason deathReason) {
         this.weight = 0.0;
-        count --;
+        if (count > 0)
+            count --;
+        else
+            count = 0;
     }
 
     public boolean update() {
+        eatEnough();
         if (hungerDeficit > 0) {
             if (random.nextDouble() <= hungerDeficit / weight) {
                 this.dies(DeathReason.STARVATION);
@@ -51,9 +43,35 @@ public class Rabbit extends Animal {
             this.dies(DeathReason.NATURAL_CAUSES);
             return true;
         }
-        this.weight += this.cell.consumeVegetationByRabbit();
         giveBirth();
         return false;
+    }
+//calculate this rabbit eats consumption
+    public void eatEnough() {
+        double excess = 0.0;
+        if (this.cell.getVegetationShare() > this.getAppetite() * 2) {
+            excess += this.getAppetite() * 2;
+            if (hungerDeficit > excess) {
+                hungerDeficit -= excess;
+            } else
+                excess -= hungerDeficit;
+                hungerDeficit = 0;
+                this.weight += excess / 2;
+
+        } else if (this.cell.getVegetationShare() > this.getAppetite()) {
+            excess += this.cell.getVegetationShare() - this.getAppetite();
+            if (hungerDeficit > excess) {
+                hungerDeficit -= excess;
+            } else {
+                excess -= hungerDeficit;
+                hungerDeficit = 0;
+                this.weight += excess / 2;
+            }
+        } else if (this.cell.getVegetationShare() < (this.weight) / 4) {
+            this.weight -= this.weight * 0.2;
+            hungerDeficit += this.getAppetite() - this.cell.getVegetationShare();
+        } else
+            hungerDeficit += this.getAppetite() - this.cell.getVegetationShare();
     }
 
     public void giveBirth() {

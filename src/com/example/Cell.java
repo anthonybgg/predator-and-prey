@@ -50,32 +50,34 @@ public class Cell {
     }
 
     public void update() {
-        //vegetation -= Rabbit.getCount() * consumeVegetationByRabbit();
-
+        double amountEaten = 0;
+        consumeVegetation(amountEaten);
+        vegetation = vegetation * (proportionalGrowthRate + 1) + linearGrowthRate;
         for (int i = 0; i < currentAnimals.size(); i++) {
             if (currentAnimals.get(i) instanceof Wolf) {
                 Wolf wolf = (Wolf) currentAnimals.get(i);
-                Animal animal = getRandomCurrentAnimal();
-                boolean hunt = animal.attemptToEat(wolf);
                 wolf.update();
+            } else {
+                Rabbit rabbit = (Rabbit) currentAnimals.get(i);
+                rabbit.update();
             }
         }
     }
 
-
     public double getVegetationShare() {
-        double vegetation;
-        vegetation = this.vegetation * (1 + this.proportionalGrowthRate) + this.linearGrowthRate;
-        vegetationShare = (0.5 * vegetation) / Rabbit.getCount();
+        vegetationShare = (0.5 * this.vegetation) / Rabbit.getCount();
         return vegetationShare;
     }
 
-    public double consumeVegetationByRabbit(Rabbit rabbit) {
-        return rabbit.getAppetite();
-    }
 
     public void consumeVegetation(double amountEaten) {
-
+        for (Animal rabbit: currentAnimals) {
+            if (rabbit instanceof Rabbit) {
+                getVegetationShare();
+                amountEaten += ((Rabbit) rabbit).getAppetite();
+            }
+        }
+        vegetation -= amountEaten;
     }
 
     public void draw(Graphics brush) {

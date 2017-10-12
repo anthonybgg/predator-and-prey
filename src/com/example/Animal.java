@@ -8,14 +8,13 @@ abstract class Animal    {
     protected Color color;
     protected Cell cell;
     protected double weight;
-    public int daysSinceMeal;
 
     public Animal() {
 
     }
 
     public boolean isAlive(Cell cell) {
-        if (this.weight > 0) {
+        if (this.weight > 0.1) {
             return true;
         } else
             return false;
@@ -30,21 +29,17 @@ abstract class Animal    {
 
     }
 
-    public double getWeightRabbit() {
-        if (this instanceof Rabbit) {
-            return this.weight;
-        }
-        else
-            return 0.0;
-    }
     public boolean attemptToEat(Wolf predator) {
-        boolean attempt = true;
+        boolean attempt = false;
         if ((random.nextDouble() <= predator.getDaysSinceMeal() * 0.05 || this instanceof Rabbit) && this != predator) {
-            if (random.nextDouble() * predator.weight > 5 * random.nextDouble() * this.weight) {
-                return attempt;
-            }
+            attempt = random.nextDouble() * predator.weight > 5 * random.nextDouble() * this.weight;
         }
-        return !attempt;
+        if (attempt) {
+            predator.setDaysSinceMeal();
+            predator.weight += this.weight;
+            this.dies(DeathReason.EATEN);
+        }
+        return attempt;
     }
 
     public void dies(DeathReason deathReason) {
