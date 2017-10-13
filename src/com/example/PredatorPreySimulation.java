@@ -28,14 +28,14 @@ public class PredatorPreySimulation extends GraphicalSimulation {
             numberOfBunnies--;
         }
     }
-//
-//    private void AddRandomNumberOfWolves(Cell cell, double maxWolves) {
-//        double numberOfWolves = maxWolves * random.nextDouble();
-//        while (random.nextDouble() < numberOfWolves) {
-//            cell.addAnimal(new Wolf(cell));
-//            numberOfWolves--;
-//        }
-//    }
+
+    private void AddRandomNumberOfWolves(Cell cell, double maxWolves) {
+        double numberOfWolves = maxWolves * random.nextDouble();
+        while (random.nextDouble() < numberOfWolves) {
+            cell.addAnimal(new Wolf(cell));
+            numberOfWolves--;
+        }
+    }
 
     public PredatorPreySimulation(ParameterBlock parameterBlock) {
         super("PredatorPreySimulation!", parameterBlock.getScreenWidth(), parameterBlock.getScreenHeight());
@@ -53,7 +53,7 @@ public class PredatorPreySimulation extends GraphicalSimulation {
                         parameterBlock.getVegetationProportionalGrowthRate(),
                         parameterBlock.getVegetationLinearGrowthRate());
                 AddRandomNumberOfBunnies(cell, parameterBlock.getMaxStartingBunnies());
-                //AddRandomNumberOfWolves(cell, parameterBlock.getMaxStartingWolves());
+                AddRandomNumberOfWolves(cell, parameterBlock.getMaxStartingWolves());
                 cells[x][y] = cell;
             }
         }

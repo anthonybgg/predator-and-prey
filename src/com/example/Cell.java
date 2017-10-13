@@ -117,9 +117,7 @@ public class Cell {
      * @param brush
      */
     public void draw(Graphics brush) {
-        for (Animal animal : currentAnimals) {
-            animal.draw(brush);
-        }
+        paint(brush);
     }
 
     /**
@@ -131,8 +129,11 @@ public class Cell {
             vegetation = maximumVegetation;
         }
         if (vegetation < maximumVegetation / 2) {
-            return Color.YELLOW;
-        } else {
+            return Color.getHSBColor(110, 100, 30);
+        } else if (vegetation < maximumVegetation) {
+            return Color.getHSBColor(110, 100, 70);
+        }
+        else {
             return Color.GREEN;
         }
     }
@@ -158,7 +159,9 @@ public class Cell {
      * @param brush is setting the color.
      */
     public void paint(Graphics brush) {
-        brush.setColor(Color.darkGray);
+        for (Animal animal : currentAnimals) {
+            animal.draw(brush);
+        }
     }
 
 }
