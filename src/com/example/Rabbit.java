@@ -12,75 +12,109 @@ public class Rabbit extends Animal {
         return count;
     }
 
+    /**
+     * Default constructor.
+     * @param cell
+     */
     public Rabbit(Cell cell) {
         this.weight = 1.0;
         this.cell = cell;
-        this.color = Color.YELLOW;
+        this.color = Color.red;
         count++;
     }
 
-    public double getAppetite() {
-        double appetite = (this.weight + 1) / 4;
-        return appetite;
+    /**
+     * @return the amount of food a bunny can eat proportionally to its weight.
+     */
+    private double getAppetite() {
+        return (this.weight + 1) / 4;
     }
 
+    @Override
     public void dies(DeathReason deathReason) {
         this.weight = 0.0;
         if (count > 0)
             count --;
-        else
+        else {
             count = 0;
+        }
     }
 
+    @Override
     public boolean update() {
-        eatEnough();
+        double amountEaten = 0;
+        if (this.cell.getVegetationShare() > getAppetite() * 2 || this.cell.getVegetationShare() > getAppetite()) {
+            this.cell.consumeVegetation(amountEaten);
+            increaseWeight();
+        } else {
+            getHungerDeficit();
+        }
         if (hungerDeficit > 0) {
             if (random.nextDouble() <= hungerDeficit / weight) {
                 this.dies(DeathReason.STARVATION);
+                return false;
             }
         }
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.01) {
             this.dies(DeathReason.NATURAL_CAUSES);
             return true;
         }
         giveBirth();
-        return false;
+        return true;
     }
-//calculate this rabbit eats consumption
-    public void eatEnough() {
-        double excess = 0.0;
-        if (this.cell.getVegetationShare() > this.getAppetite() * 2) {
-            excess += this.getAppetite() * 2;
-            if (hungerDeficit > excess) {
-                hungerDeficit -= excess;
-            } else
-                excess -= hungerDeficit;
-                hungerDeficit = 0;
-                this.weight += excess / 2;
 
-        } else if (this.cell.getVegetationShare() > this.getAppetite()) {
-            excess += this.cell.getVegetationShare() - this.getAppetite();
+    /**
+     * This helper function will verify each condition for a bunny to go hungry.
+     * @return the hunger deficit
+     */
+    private double getHungerDeficit() {
+        if (this.cell.getVegetationShare() < weight / 4) {
+            weight -= weight * 0.2;
+            hungerDeficit += getAppetite() - this.cell.getVegetationShare();
+            return hungerDeficit;
+        } else if (this.cell.getVegetationShare() < getAppetite()) {
+            hungerDeficit += getAppetite() - this.cell.getVegetationShare();
+            return hungerDeficit;
+        } else {
+            return hungerDeficit;
+        }
+    }
+
+    /**
+     * This helper function will verify each condition for a rabbit to increase its weight.
+     * @return the weight of the rabbit.
+     */
+    private double increaseWeight() {
+        double excess = 0.0;
+        if (this.cell.getVegetationShare() > getAppetite() * 2) {
+            excess += this.getAppetite() * 2;
             if (hungerDeficit > excess) {
                 hungerDeficit -= excess;
             } else {
                 excess -= hungerDeficit;
                 hungerDeficit = 0;
-                this.weight += excess / 2;
+                weight += excess / 2;
             }
-        } else if (this.cell.getVegetationShare() < (this.weight) / 4) {
-            this.weight -= this.weight * 0.2;
-            hungerDeficit += this.getAppetite() - this.cell.getVegetationShare();
-        } else
-            hungerDeficit += this.getAppetite() - this.cell.getVegetationShare();
+        } else if (this.cell.getVegetationShare() > getAppetite()) {
+            if (hungerDeficit > excess) {
+                hungerDeficit -= excess;
+            } else {
+                excess -= hungerDeficit;
+                hungerDeficit = 0;
+                weight += excess / 2;
+            }
+        }
+        return weight;
     }
 
-    public void giveBirth() {
+    private void giveBirth() {
         if (this.weight > 10) {
             if (random.nextDouble() < 0.1) {
-                int babyRabbit = 1 + random.nextInt(7);
+                double babyRabbit = 1 + random.nextInt(7);
                 count += babyRabbit;
-                this.weight -= 1;
+                this.weight -= babyRabbit;
             }
         }
     }
+
 }

@@ -6,10 +6,18 @@ public class Wolf extends Animal {
     private static int count;
     private int daysSinceMeal;
 
+    /**
+     * Get the number of wolves.
+     * @return the number of wolves.
+     */
     public static int getCount() {
         return count;
     }
 
+    /**
+     * Default constructor.
+     * @param cell
+     */
     public Wolf(Cell cell) {
         this.weight = 10;
         this.cell = cell;
@@ -18,55 +26,61 @@ public class Wolf extends Animal {
         count ++;
     }
 
-    public int getDaysSinceMeal() {
-        if (!this.attemptToEat(this)) {
-            daysSinceMeal ++;
-            this.weight -= this.daysSinceMeal * 0.02;
-        } else
-            daysSinceMeal = 0;
-        return daysSinceMeal;
-    }
-
-    public int setDaysSinceMeal() {
-        return daysSinceMeal = 0;
-    }
-
+    @Override
     public void dies(DeathReason deathReason) {
         this.weight = 0;
-        if (count > 0)
+        if (count > 0) {
             count --;
-        else
+        }
+        else {
             count = 0;
+        }
     }
 
-    public void giveBirth() {
-        if (this.weight > 50) {
+    /**
+     * Helper function that will check the condition for a wolf to give birth.
+     */
+    private void giveBirth() {
+        if (weight > 50) {
             if (random.nextDouble() < 0.2) {
                 Animal babyWolf = new Wolf(cell);
                 count ++;
-                this.weight -= babyWolf.weight * 2.0 ;
+                weight -= babyWolf.weight * 2.0 ;
             }
         }
     }
 
-    public boolean wolfEatsWolf() {
-        getDaysSinceMeal();
-        if (this.daysSinceMeal > 20) {
-            if (this.cell.getRandomCurrentAnimal() instanceof Wolf) {
-                count --;
+    /**
+     * Helper function that will try to make a predator eats a random prey.
+     * @return true if the predator successfully ate his prey.
+     */
+    private boolean attempt() {
+        boolean attempt;
+        if (!isAlive()) {
+            return false;
+        }
+        Animal prey = this.cell.getRandomCurrentAnimal();
+        if ((random.nextDouble() <= daysSinceMeal * 0.05) && prey instanceof Wolf) {
+            attempt = prey.attemptToEat(this);
+            if (attempt) {
                 daysSinceMeal = 0;
-                return true;
+                weight += prey.weight;
+                prey.dies(DeathReason.EATEN);
+            } else {
+                daysSinceMeal++;
+                weight -= daysSinceMeal * 0.02;
+                if (random.nextDouble() > daysSinceMeal * 0.05) {
+                    dies(DeathReason.STARVATION);
+                }
             }
-            return true;
         }
-        return false;
+        return true;
     }
+
+    @Override
     public boolean update() {
-        if (random.nextDouble() < this.daysSinceMeal * 0.5) {
-            this.dies(DeathReason.STARVATION);
-        }
+        attempt();
         giveBirth();
-        wolfEatsWolf();
-        return false;
+        return true;
     }
 }
